@@ -915,157 +915,113 @@ console.log('%c🎨 QR Studio %cby deadboy18','font-size:20px;font-weight:bold;c
 console.log('%c🥚 Psst... hidden easter eggs!','font-size:12px;color:#f59e0b;font-style:italic;');
 console.log('%c  ⬆⬆⬇⬇⬅➡⬅➡🅱🅰  %cKonami → 🎉\n%c  📱 Triple-tap title   %c→ 🌈 Party\n%c  📱 Shake phone        %c→ 🎊 Confetti\n%c  ⌨️  "matrix" in URL   %c→ 💊 Red pill','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;');
 </script>
-<!-- === QR Studio 全量深度汉化与双语切换补丁 === -->
+<!-- === QR Studio 完美汉化补丁 (精准挂载顶栏 + 全量词库) === -->
 <style>
+  /* 顶部切换按钮样式 */
   .lang-toggle-btn {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
     padding: 6px 12px;
     border-radius: 8px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    border: 1px solid rgba(128, 128, 128, 0.25);
-    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
     color: inherit;
     transition: all 0.2s ease;
-    margin-left: 8px;
+    margin-left: 10px;
+    vertical-align: middle;
   }
   .lang-toggle-btn:hover {
-    background: rgba(128, 128, 128, 0.12);
+    background: rgba(255, 255, 255, 0.18);
   }
 </style>
 
 <script>
 (function() {
-  const zhDict = {
-    // --- 顶栏、副标题与模式切换 ---
-    "Standard & branded QR codes, zero bloat": "专业标准与个性化品牌二维码，轻量无冗余",
-    "Classic QR codes": "经典二维码",
-    "Image-blended mosaic": "图像融合马赛克",
-    "Read & decode QR": "识别与解码二维码",
-    "Standard": "标准模式",
-    "ChromaCode": "视觉融合",
-    "Scanner": "扫码与解码",
-    "Calendar": "日历事件",
+  // 核心汉化映射表（涵盖所有遗留英文）
+  const translations = [
+    // 顶栏与说明
+    ["Standard & branded QR codes, zero bloat", "专业标准与品牌个性化二维码，纯净无广告"],
+    ["Classic QR codes", "经典二维码"],
+    ["Image-blended mosaic", "图像融合马赛克"],
+    ["Read & decode QR", "识别与解码二维码"],
 
-    // --- 样式与颜色区域 (STYLE & COLORS) ---
-    "STYLE & COLORS": "样式与外观配色",
-    "QR color": "二维码颜色",
-    "Error correction": "容错级别",
-    "Resolution": "分辨率",
-    "Template": "边框主题模板",
-    "Center logo": "中心图标 Logo",
-    "Stroke width — 0%": "描边粗细 — 0%",
-    "Add outline": "添加外边框描边",
-    "Invert colors": "反转颜色",
-    "Tap to upload": "点击上传图标",
-    "Low (7%)": "低 (7%)",
-    "Medium (15%)": "中 (15% 默认推荐)",
-    "Quartile (25%)": "较高 (25% 适合含Logo)",
-    "High (30%)": "极高 (30% 最高抗损)",
-    "Classic": "经典无边框",
-    "🎄 Christmas": "🎄 圣诞节",
-    "🎃 Halloween": "🎃 万圣节",
-    "🎆 New Year": "🎆 新年元旦",
-    "🥚 Easter": "🥚 复活节",
-    "💖 Valentine": "💖 情人节",
-    "☘️ St. Patrick's": "☘️ 圣帕特里克节",
-    "🎂 Birthday": "🎂 生日快乐",
+    // 样式与颜色区域 (重点遗留部分)
+    ["STYLE & COLORS", "外观样式与配色"],
+    ["Style & Colors", "外观样式与配色"],
+    ["QR color", "二维码颜色"],
+    ["Error correction", "容错级别"],
+    ["Resolution", "输出分辨率"],
+    ["Template", "边框主题模板"],
+    ["Center logo", "中心图标 Logo"],
+    ["Stroke width", "描边粗细"],
+    ["Add outline", "添加轮廓描边"],
+    ["Invert colors", "反转黑白颜色"],
+    ["Tap to upload", "点击上传图片"],
+    ["Low (7%)", "低 (7%)"],
+    ["Medium (15%)", "中 (15% 默认推荐)"],
+    ["Quartile (25%)", "较高 (25% 适合含图标)"],
+    ["High (30%)", "极高 (30% 最高抗损)"],
 
-    // --- 表单标签与字段 ---
-    "Network name (SSID)": "Wi-Fi 网络名称 (SSID)",
-    "Hidden network": "隐藏网络",
-    "DISPLAY BELOW QR CODE": "二维码下方显示信息",
-    "Show SSID": "显示网络名称 (SSID)",
-    "Show Password": "显示连接密码",
-    "Show Encryption": "显示加密类型",
-    "Email address": "电子邮箱地址",
-    "Subject": "邮件主题",
-    "Body": "邮件正文",
-    "Phone number": "电话号码",
-    "Message (optional)": "短信内容 (可选)",
-    "Pre-filled message (optional)": "预设聊天消息 (可选)",
-    "Location name or address": "地点名称或详细地址",
-    "Latitude": "纬度 (Latitude)",
-    "Longitude": "经度 (Longitude)",
-    "Event title": "事件标题",
-    "Description": "详细描述",
-    "Start date": "开始日期",
-    "Start time": "开始时间",
-    "End date": "结束日期",
-    "End time": "结束时间",
-    "All-day event": "全天事件",
-    "First name": "名 (First Name)",
-    "Last name": "姓 (Last Name)",
-    "Organization": "公司/机构",
-    "Website": "个人主页/网址",
+    // 边框模板选项
+    ["Classic", "经典无边框"],
+    ["Christmas", "圣诞节"],
+    ["Halloween", "万圣节"],
+    ["New Year", "新年元旦"],
+    ["Easter", "复活节"],
+    ["Valentine", "情人节"],
+    ["St. Patrick's", "圣帕特里克节"],
+    ["Birthday", "生日快乐"],
 
-    // --- DuitNow 支付码 ---
-    "QR Type": "二维码类型",
-    "Acquirer / Bank *": "收单机构 / 银行 *",
-    "Merchant / QR ID *": "商户号 / QR ID *",
-    "Merchant Name *": "商户名称 *",
-    "City *": "所在城市 *",
-    "Postal Code": "邮政编码",
-    "Category (MCC)": "商户行业类别 (MCC)",
-    "Amount (optional)": "支付金额 (可选)",
-    "Static (reusable)": "静态码 (长期有效)",
-    "Dynamic (one-time)": "动态码 (单次交易)",
-    "⚙️ Additional Data (optional)": "⚙️ 附加字段参数 (可选)",
-    "Reference Label": "账单参考号 (Reference)",
-    "Terminal Label": "终端编号 (Terminal ID)",
-    "Bill Number": "发票编号 (Invoice #)",
-    "Store Label": "门店编号 (Store #)",
+    // 视觉融合 ChromaCode
+    ["URL to encode", "编码目标网址"],
+    ["Fallback dark", "备用暗部颜色"],
+    ["BRAND IMAGE", "品牌图标与图像"],
+    ["Favicon", "网站图标 (Favicon)"],
+    ["Upload", "本地上传图片"],
+    ["Image URL", "网络图片链接"],
+    ["Auto-fetches the site's favicon from the URL above.", "自动从上方填写的网址抓取站点的 Favicon 图标。"],
+    ["Drop image or tap to browse", "拖拽图片至此，或点击浏览选择文件"],
+    ["Advanced Settings", "高级算法设置"],
+    ["Generate ChromaCode", "生成 ChromaCode 融合码"],
+    ["Dot shape", "码点形状"],
+    ["Circle", "圆形 (Circle)"],
+    ["Rounded", "圆角矩形 (Rounded)"],
+    ["Square", "方形 (Square)"],
+    ["Output size", "输出分辨率尺寸"],
+    ["Dark dot range", "暗部点阵范围"],
+    ["Ghost strength", "底图浮现强度"],
+    ["Ghost threshold", "底图融合阈值"],
+    ["Use image colors", "使用原图色彩渲染点阵"],
 
-    // --- 视觉融合模式 (ChromaCode) ---
-    "URL to encode": "编码目标网址",
-    "Fallback dark": "备用暗部色彩",
-    "BRAND IMAGE": "品牌与图案设置",
-    "Favicon": "网站图标 (Favicon)",
-    "Upload": "本地上传图片",
-    "Image URL": "网络图片链接",
-    "Auto-fetches the site's favicon from the URL above.": "自动从上方输入的网址抓取站点的 Favicon 图标。",
-    "Drop image or tap to browse": "拖拽图片至此，或点击浏览选择文件",
-    "⚙️ Advanced Settings": "⚙️ 高级算法设置",
-    "Generate ChromaCode": "生成 ChromaCode 融合码",
-    "Dot shape": "码点形状",
-    "Circle": "圆形 (Circle)",
-    "Rounded": "圆角矩形 (Rounded)",
-    "Square": "方形 (Square)",
-    "Output size": "输出分辨率尺寸",
-    "Dark dot range": "暗部点阵范围",
-    "Ghost strength": "底图浮现强度 (Ghost)",
-    "Ghost threshold": "底图融合阈值",
-    "Use image colors": "使用原图色彩渲染点阵",
+    // 扫码解码 Scanner
+    ["SCAN QR CODE", "扫描与解析二维码"],
+    ["Open Camera", "开启摄像头扫码"],
+    ["Camera access stays in your browser. We never record, store, or transmit video.", "摄像头画面仅在本地浏览器处理，绝不录制、存储或上传任何数据。"],
+    ["Drop image, tap to browse, or paste (Ctrl+V)", "拖入图片、点击浏览选择文件，或直接按 Ctrl+V 粘贴图片"],
+    ["Regenerate Clean QR", "重新生成高清矢量二维码"],
+    ["Decoded Content", "解码文本内容"],
 
-    // --- 扫码与解码模式 (Scanner) ---
-    "SCAN QR CODE": "扫描与反向解析二维码",
-    "📷 Open Camera": "📷 开启摄像头扫码",
-    "🔒 Camera access stays in your browser. We never record, store, or transmit video.": "🔒 摄像头画面仅在本地浏览器实时处理，绝不录制、存储或上传任何数据。",
-    "📁 Drop image, tap to browse, or paste (Ctrl+V)": "📁 拖入图片、点击浏览选择文件，或直接按 Ctrl+V 粘贴图片",
-    "Regenerate Clean QR": "重新生成高清矢量二维码",
-    "Decoded Content": "解码结果内容",
+    // Wi-Fi 与日历等表单字段
+    ["Network name (SSID)", "Wi-Fi 名称 (SSID)"],
+    ["Hidden network", "隐藏网络"],
+    ["DISPLAY BELOW QR CODE", "二维码下方显示说明"],
+    ["Show SSID", "显示 Wi-Fi 名称"],
+    ["Show Password", "显示连接密码"],
+    ["Show Encryption", "显示加密方式"],
+    ["Event title", "事件标题"],
+    ["Description", "详细说明"],
+    ["Start date", "开始日期"],
+    ["Start time", "开始时间"],
+    ["End date", "结束日期"],
+    ["End time", "结束时间"],
+    ["All-day event", "全天事件"]
+  ];
 
-    // --- 导出与操作 ---
-    "Download PNG": "下载 PNG 高清图",
-    "Download SVG": "下载 SVG 矢量图",
-    "Copy Image": "复制图片",
-    "Copy Link": "复制分享链接",
-    "Reset": "重置参数",
-    "Clear": "清空内容",
-
-    // --- 校验报错提示 ---
-    "SSID required": "请输入 Wi-Fi 名称 (SSID)",
-    "Password required for WPA": "WPA 加密模式必须填写密码",
-    "Title required": "请填写事件标题",
-    "Date required": "请选择事件日期",
-    "Name required": "请填写姓名"
-  };
-
-  // 占位符 (Placeholder) 专项替换映射表
-  const placeholderDict = {
+  // 占位符 (Placeholder) 映射
+  const phMap = {
     "https://example.com": "https://example.com（输入网址）",
     "Enter any text or message...": "请输入任意文本或消息内容...",
     "MyWiFi": "例如：Home_WiFi_5G",
@@ -1078,58 +1034,51 @@ console.log('%c  ⬆⬆⬇⬇⬅➡⬅➡🅱🅰  %cKonami → 🎉\n%c  📱 T
     "Eiffel Tower, Paris": "例如：东方明珠广播电视塔",
     "Team Meeting": "例如：周度项目例会",
     "Agenda...": "会议议程或备注说明...",
-    "Conference Room A": "例如：3号会议室",
-    "Jane": "三",
-    "Smith": "张",
-    "Acme Inc.": "例如：科技有限公司",
-    "— Select acquirer —": "— 请选择收单银行/机构 —",
-    "e.g. 10.00": "例如：88.00",
-    "https://example.com/logo.png": "https://example.com/logo.png"
+    "Conference Room A": "例如：3号会议室"
   };
 
-  let currentLang = localStorage.getItem('qr_studio_lang') || 'zh';
+  const currentLang = localStorage.getItem('qr_studio_lang') || 'zh';
 
-  function applyFullTranslation() {
+  function translate() {
     if (currentLang !== 'zh') return;
 
-    // 1. 替换页面可见文本节点
+    // 1. 递归替换页面上所有文本节点
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
     let node;
     while (node = walker.nextNode()) {
-      const val = node.nodeValue.trim();
-      if (zhDict[val]) {
-        node.nodeValue = node.nodeValue.replace(val, zhDict[val]);
-      }
+      let text = node.nodeValue;
+      if (!text || !text.trim()) continue;
+
+      translations.forEach(([en, zh]) => {
+        if (text.includes(en)) {
+          text = text.split(en).join(zh);
+        }
+      });
+      node.nodeValue = text;
     }
 
-    // 2. 替换所有 input / textarea 占位符
+    // 2. 替换输入框 Placeholder
     document.querySelectorAll('input, textarea').forEach(el => {
       const ph = el.getAttribute('placeholder');
-      if (ph && (placeholderDict[ph] || zhDict[ph])) {
-        el.setAttribute('placeholder', placeholderDict[ph] || zhDict[ph]);
+      if (ph && phMap[ph]) {
+        el.setAttribute('placeholder', phMap[ph]);
       }
     });
 
-    // 3. 替换 select 下拉选项文本
+    // 3. 替换下拉菜单选项
     document.querySelectorAll('select option').forEach(opt => {
-      const txt = opt.textContent.trim();
-      if (zhDict[txt]) {
-        opt.textContent = zhDict[txt];
-      }
-    });
-
-    // 4. 替换 title / aria-label 属性
-    document.querySelectorAll('[title], [aria-label]').forEach(el => {
-      const t = el.getAttribute('title');
-      if (t && zhDict[t]) el.setAttribute('title', zhDict[t]);
-      const al = el.getAttribute('aria-label');
-      if (al && zhDict[al]) el.setAttribute('aria-label', zhDict[al]);
+      translations.forEach(([en, zh]) => {
+        if (opt.textContent.includes(en)) {
+          opt.textContent = opt.textContent.replace(en, zh);
+        }
+      });
     });
   }
 
-  // 插入顶部切换按钮
-  function insertLangToggle() {
+  // 将语言按钮精准插入到顶栏 .hdr 中
+  function insertButton() {
     if (document.getElementById('lang-toggle-btn')) return;
+
     const btn = document.createElement('button');
     btn.id = 'lang-toggle-btn';
     btn.className = 'lang-toggle-btn';
@@ -1140,19 +1089,26 @@ console.log('%c  ⬆⬆⬇⬇⬅➡⬅➡🅱🅰  %cKonami → 🎉\n%c  📱 T
       window.location.reload();
     };
 
-    // 挂载至顶栏区域
-    const target = document.querySelector('header, nav, .header, .nav, .top-bar, .controls') || document.body;
-    target.appendChild(btn);
+    // 精确匹配该站点的顶栏类名 .hdr
+    const hdr = document.querySelector('.hdr, .header, header');
+    if (hdr) {
+      hdr.appendChild(btn);
+    } else {
+      // 备用方案：固定在右上角，防止被挤到底部
+      btn.style.cssText = 'position:fixed;top:16px;right:70px;z-index:99999;';
+      document.body.appendChild(btn);
+    }
   }
 
+  // 页面加载与动态切换监听
   window.addEventListener('DOMContentLoaded', () => {
-    insertLangToggle();
+    insertButton();
     if (currentLang === 'zh') {
-      applyFullTranslation();
-      // 监听选项卡切换与动态表单加载
-      const observer = new MutationObserver(() => applyFullTranslation());
+      translate();
+      // 监听选项卡点击与 DOM 动态变化，触发即时补翻
+      const observer = new MutationObserver(() => translate());
       observer.observe(document.body, { childList: true, subtree: true });
-      document.addEventListener('click', () => setTimeout(applyFullTranslation, 50));
+      document.addEventListener('click', () => setTimeout(translate, 50));
     }
   });
 })();
