@@ -915,9 +915,8 @@ console.log('%c🎨 QR Studio %cby deadboy18','font-size:20px;font-weight:bold;c
 console.log('%c🥚 Psst... hidden easter eggs!','font-size:12px;color:#f59e0b;font-style:italic;');
 console.log('%c  ⬆⬆⬇⬇⬅➡⬅➡🅱🅰  %cKonami → 🎉\n%c  📱 Triple-tap title   %c→ 🌈 Party\n%c  📱 Shake phone        %c→ 🎊 Confetti\n%c  ⌨️  "matrix" in URL   %c→ 💊 Red pill','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;');
 </script>
-<!-- === QR Studio 中文/英文 语言切换与汉化补丁 === -->
+<!-- === QR Studio 全量深度汉化与双语切换补丁 === -->
 <style>
-  /* 语言切换按钮样式 */
   .lang-toggle-btn {
     display: inline-flex;
     align-items: center;
@@ -931,141 +930,229 @@ console.log('%c  ⬆⬆⬇⬇⬅➡⬅➡🅱🅰  %cKonami → 🎉\n%c  📱 T
     background: transparent;
     color: inherit;
     transition: all 0.2s ease;
+    margin-left: 8px;
   }
   .lang-toggle-btn:hover {
-    background: rgba(128, 128, 128, 0.1);
+    background: rgba(128, 128, 128, 0.12);
   }
 </style>
 
 <script>
 (function() {
-  // 1. 中英词汇映射字典
   const zhDict = {
-    // 导航与模式
+    // --- 顶栏、副标题与模式切换 ---
+    "Standard & branded QR codes, zero bloat": "专业标准与个性化品牌二维码，轻量无冗余",
+    "Classic QR codes": "经典二维码",
+    "Image-blended mosaic": "图像融合马赛克",
+    "Read & decode QR": "识别与解码二维码",
     "Standard": "标准模式",
-    "ChromaCode": "视觉融合 (ChromaCode)",
+    "ChromaCode": "视觉融合",
     "Scanner": "扫码与解码",
-    "DuitNow": "DuitNow 支付码",
-    "Generate": "生成",
-    "Scan": "扫描",
+    "Calendar": "日历事件",
 
-    // 数据类型
-    "URL": "网址链接",
-    "Text": "纯文本",
-    "WiFi": "Wi-Fi 网络",
-    "Email": "电子邮箱",
-    "Phone": "电话号码",
-    "SMS": "短信",
-    "WhatsApp": "WhatsApp",
-    "Location": "地理位置",
-    "Calendar Event": "日历事件",
-    "vCard": "电子名片",
+    // --- 样式与颜色区域 (STYLE & COLORS) ---
+    "STYLE & COLORS": "样式与外观配色",
+    "QR color": "二维码颜色",
+    "Error correction": "容错级别",
+    "Resolution": "分辨率",
+    "Template": "边框主题模板",
+    "Center logo": "中心图标 Logo",
+    "Stroke width — 0%": "描边粗细 — 0%",
+    "Add outline": "添加外边框描边",
+    "Invert colors": "反转颜色",
+    "Tap to upload": "点击上传图标",
+    "Low (7%)": "低 (7%)",
+    "Medium (15%)": "中 (15% 默认推荐)",
+    "Quartile (25%)": "较高 (25% 适合含Logo)",
+    "High (30%)": "极高 (30% 最高抗损)",
+    "Classic": "经典无边框",
+    "🎄 Christmas": "🎄 圣诞节",
+    "🎃 Halloween": "🎃 万圣节",
+    "🎆 New Year": "🎆 新年元旦",
+    "🥚 Easter": "🥚 复活节",
+    "💖 Valentine": "💖 情人节",
+    "☘️ St. Patrick's": "☘️ 圣帕特里克节",
+    "🎂 Birthday": "🎂 生日快乐",
 
-    // 通用设置与参数
-    "Content": "内容",
-    "Design": "外观设计",
-    "Colors": "颜色设置",
-    "Foreground": "前景色",
-    "Background": "背景色",
-    "Logo": "中心图标",
-    "Upload Logo": "上传图标",
-    "Remove Logo": "移除图标",
-    "Quiet Zone": "留白边距",
-    "Error Correction": "容错率",
-    "Size": "尺寸",
-    "Border": "边框",
-    "Preset Colors": "预设配色",
-    "Holiday Frames": "节日边框",
+    // --- 表单标签与字段 ---
+    "Network name (SSID)": "Wi-Fi 网络名称 (SSID)",
+    "Hidden network": "隐藏网络",
+    "DISPLAY BELOW QR CODE": "二维码下方显示信息",
+    "Show SSID": "显示网络名称 (SSID)",
+    "Show Password": "显示连接密码",
+    "Show Encryption": "显示加密类型",
+    "Email address": "电子邮箱地址",
+    "Subject": "邮件主题",
+    "Body": "邮件正文",
+    "Phone number": "电话号码",
+    "Message (optional)": "短信内容 (可选)",
+    "Pre-filled message (optional)": "预设聊天消息 (可选)",
+    "Location name or address": "地点名称或详细地址",
+    "Latitude": "纬度 (Latitude)",
+    "Longitude": "经度 (Longitude)",
+    "Event title": "事件标题",
+    "Description": "详细描述",
+    "Start date": "开始日期",
+    "Start time": "开始时间",
+    "End date": "结束日期",
+    "End time": "结束时间",
+    "All-day event": "全天事件",
+    "First name": "名 (First Name)",
+    "Last name": "姓 (Last Name)",
+    "Organization": "公司/机构",
+    "Website": "个人主页/网址",
 
-    // 导出与操作
-    "Download PNG": "下载 PNG 图片",
+    // --- DuitNow 支付码 ---
+    "QR Type": "二维码类型",
+    "Acquirer / Bank *": "收单机构 / 银行 *",
+    "Merchant / QR ID *": "商户号 / QR ID *",
+    "Merchant Name *": "商户名称 *",
+    "City *": "所在城市 *",
+    "Postal Code": "邮政编码",
+    "Category (MCC)": "商户行业类别 (MCC)",
+    "Amount (optional)": "支付金额 (可选)",
+    "Static (reusable)": "静态码 (长期有效)",
+    "Dynamic (one-time)": "动态码 (单次交易)",
+    "⚙️ Additional Data (optional)": "⚙️ 附加字段参数 (可选)",
+    "Reference Label": "账单参考号 (Reference)",
+    "Terminal Label": "终端编号 (Terminal ID)",
+    "Bill Number": "发票编号 (Invoice #)",
+    "Store Label": "门店编号 (Store #)",
+
+    // --- 视觉融合模式 (ChromaCode) ---
+    "URL to encode": "编码目标网址",
+    "Fallback dark": "备用暗部色彩",
+    "BRAND IMAGE": "品牌与图案设置",
+    "Favicon": "网站图标 (Favicon)",
+    "Upload": "本地上传图片",
+    "Image URL": "网络图片链接",
+    "Auto-fetches the site's favicon from the URL above.": "自动从上方输入的网址抓取站点的 Favicon 图标。",
+    "Drop image or tap to browse": "拖拽图片至此，或点击浏览选择文件",
+    "⚙️ Advanced Settings": "⚙️ 高级算法设置",
+    "Generate ChromaCode": "生成 ChromaCode 融合码",
+    "Dot shape": "码点形状",
+    "Circle": "圆形 (Circle)",
+    "Rounded": "圆角矩形 (Rounded)",
+    "Square": "方形 (Square)",
+    "Output size": "输出分辨率尺寸",
+    "Dark dot range": "暗部点阵范围",
+    "Ghost strength": "底图浮现强度 (Ghost)",
+    "Ghost threshold": "底图融合阈值",
+    "Use image colors": "使用原图色彩渲染点阵",
+
+    // --- 扫码与解码模式 (Scanner) ---
+    "SCAN QR CODE": "扫描与反向解析二维码",
+    "📷 Open Camera": "📷 开启摄像头扫码",
+    "🔒 Camera access stays in your browser. We never record, store, or transmit video.": "🔒 摄像头画面仅在本地浏览器实时处理，绝不录制、存储或上传任何数据。",
+    "📁 Drop image, tap to browse, or paste (Ctrl+V)": "📁 拖入图片、点击浏览选择文件，或直接按 Ctrl+V 粘贴图片",
+    "Regenerate Clean QR": "重新生成高清矢量二维码",
+    "Decoded Content": "解码结果内容",
+
+    // --- 导出与操作 ---
+    "Download PNG": "下载 PNG 高清图",
     "Download SVG": "下载 SVG 矢量图",
     "Copy Image": "复制图片",
-    "Copy Link": "复制链接",
-    "Reset": "重置",
-    "Clear": "清空",
+    "Copy Link": "复制分享链接",
+    "Reset": "重置参数",
+    "Clear": "清空内容",
 
-    // 扫码与解码
-    "Upload Image": "上传图片",
-    "Camera": "摄像头扫描",
-    "Drop an image here or paste": "拖拽图片至此或直接粘贴",
-    "Regenerate Clean QR": "重新生成清晰二维码",
-    "Decoded Content": "解码内容",
-
-    // 表单占位与提示
-    "Enter URL": "请输入网址链接",
-    "Enter text": "请输入文本内容",
-    "Network Name (SSID)": "网络名称 (SSID)",
-    "Password": "密码",
-    "Encryption": "加密方式",
-    "Hidden Network": "隐藏网络"
+    // --- 校验报错提示 ---
+    "SSID required": "请输入 Wi-Fi 名称 (SSID)",
+    "Password required for WPA": "WPA 加密模式必须填写密码",
+    "Title required": "请填写事件标题",
+    "Date required": "请选择事件日期",
+    "Name required": "请填写姓名"
   };
 
-  // 2. 文本翻译函数
+  // 占位符 (Placeholder) 专项替换映射表
+  const placeholderDict = {
+    "https://example.com": "https://example.com（输入网址）",
+    "Enter any text or message...": "请输入任意文本或消息内容...",
+    "MyWiFi": "例如：Home_WiFi_5G",
+    "Min 8 characters": "至少 8 位密码",
+    "hello@example.com": "例如：service@domain.com",
+    "Subject line": "填写邮件主题...",
+    "Email body...": "在此编写邮件正文...",
+    "Pre-filled SMS text...": "填写预设的短信内容...",
+    "Hi! I saw your site...": "你好！我在网站上看到你的信息...",
+    "Eiffel Tower, Paris": "例如：东方明珠广播电视塔",
+    "Team Meeting": "例如：周度项目例会",
+    "Agenda...": "会议议程或备注说明...",
+    "Conference Room A": "例如：3号会议室",
+    "Jane": "三",
+    "Smith": "张",
+    "Acme Inc.": "例如：科技有限公司",
+    "— Select acquirer —": "— 请选择收单银行/机构 —",
+    "e.g. 10.00": "例如：88.00",
+    "https://example.com/logo.png": "https://example.com/logo.png"
+  };
+
   let currentLang = localStorage.getItem('qr_studio_lang') || 'zh';
 
-  function applyTranslation(lang) {
-    if (lang !== 'zh') {
-      // 切换回英文时重新载入页面保持原生状态
-      if (localStorage.getItem('qr_studio_lang') === 'zh') {
-        localStorage.setItem('qr_studio_lang', 'en');
-        window.location.reload();
-      }
-      return;
-    }
+  function applyFullTranslation() {
+    if (currentLang !== 'zh') return;
 
-    localStorage.setItem('qr_studio_lang', 'zh');
-
-    // 遍历所有文本节点进行翻译
+    // 1. 替换页面可见文本节点
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
     let node;
     while (node = walker.nextNode()) {
-      const trimmed = node.nodeValue.trim();
-      if (zhDict[trimmed]) {
-        node.nodeValue = node.nodeValue.replace(trimmed, zhDict[trimmed]);
+      const val = node.nodeValue.trim();
+      if (zhDict[val]) {
+        node.nodeValue = node.nodeValue.replace(val, zhDict[val]);
       }
     }
 
-    // 替换 input / textarea 的 placeholder
+    // 2. 替换所有 input / textarea 占位符
     document.querySelectorAll('input, textarea').forEach(el => {
       const ph = el.getAttribute('placeholder');
-      if (ph && zhDict[ph]) {
-        el.setAttribute('placeholder', zhDict[ph]);
+      if (ph && (placeholderDict[ph] || zhDict[ph])) {
+        el.setAttribute('placeholder', placeholderDict[ph] || zhDict[ph]);
       }
     });
 
-    // 替换按钮 title / aria-label
-    document.querySelectorAll('[title]').forEach(el => {
+    // 3. 替换 select 下拉选项文本
+    document.querySelectorAll('select option').forEach(opt => {
+      const txt = opt.textContent.trim();
+      if (zhDict[txt]) {
+        opt.textContent = zhDict[txt];
+      }
+    });
+
+    // 4. 替换 title / aria-label 属性
+    document.querySelectorAll('[title], [aria-label]').forEach(el => {
       const t = el.getAttribute('title');
       if (t && zhDict[t]) el.setAttribute('title', zhDict[t]);
+      const al = el.getAttribute('aria-label');
+      if (al && zhDict[al]) el.setAttribute('aria-label', zhDict[al]);
     });
   }
 
-  // 3. 注入语言切换按钮
-  function insertLangButton() {
+  // 插入顶部切换按钮
+  function insertLangToggle() {
+    if (document.getElementById('lang-toggle-btn')) return;
     const btn = document.createElement('button');
+    btn.id = 'lang-toggle-btn';
     btn.className = 'lang-toggle-btn';
-    btn.innerHTML = currentLang === 'zh' ? '🌐 中文 / EN' : '🌐 EN / 中文';
+    btn.textContent = currentLang === 'zh' ? '🌐 语言: 中文' : '🌐 Lang: EN';
     btn.onclick = () => {
-      const nextLang = currentLang === 'zh' ? 'en' : 'zh';
-      currentLang = nextLang;
-      localStorage.setItem('qr_studio_lang', nextLang);
+      const next = currentLang === 'zh' ? 'en' : 'zh';
+      localStorage.setItem('qr_studio_lang', next);
       window.location.reload();
     };
 
-    // 优先插入到顶部导航栏右侧（通常是暗色模式按钮旁）
-    const headerControls = document.querySelector('header, nav, .header, .nav, .controls') || document.body;
-    headerControls.appendChild(btn);
+    // 挂载至顶栏区域
+    const target = document.querySelector('header, nav, .header, .nav, .top-bar, .controls') || document.body;
+    target.appendChild(btn);
   }
 
-  // 4. 页面就绪后启动
   window.addEventListener('DOMContentLoaded', () => {
-    insertLangButton();
+    insertLangToggle();
     if (currentLang === 'zh') {
-      applyTranslation('zh');
-      // 监听动态 DOM 变化（切换选项卡时补翻）
-      const observer = new MutationObserver(() => applyTranslation('zh'));
+      applyFullTranslation();
+      // 监听选项卡切换与动态表单加载
+      const observer = new MutationObserver(() => applyFullTranslation());
       observer.observe(document.body, { childList: true, subtree: true });
+      document.addEventListener('click', () => setTimeout(applyFullTranslation, 50));
     }
   });
 })();
