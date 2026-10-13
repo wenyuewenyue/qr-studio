@@ -915,5 +915,160 @@ console.log('%c🎨 QR Studio %cby deadboy18','font-size:20px;font-weight:bold;c
 console.log('%c🥚 Psst... hidden easter eggs!','font-size:12px;color:#f59e0b;font-style:italic;');
 console.log('%c  ⬆⬆⬇⬇⬅➡⬅➡🅱🅰  %cKonami → 🎉\n%c  📱 Triple-tap title   %c→ 🌈 Party\n%c  📱 Shake phone        %c→ 🎊 Confetti\n%c  ⌨️  "matrix" in URL   %c→ 💊 Red pill','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;');
 </script>
+<!-- === QR Studio 中文/英文 语言切换与汉化补丁 === -->
+<style>
+  /* 语言切换按钮样式 */
+  .lang-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    background: transparent;
+    color: inherit;
+    transition: all 0.2s ease;
+  }
+  .lang-toggle-btn:hover {
+    background: rgba(128, 128, 128, 0.1);
+  }
+</style>
+
+<script>
+(function() {
+  // 1. 中英词汇映射字典
+  const zhDict = {
+    // 导航与模式
+    "Standard": "标准模式",
+    "ChromaCode": "视觉融合 (ChromaCode)",
+    "Scanner": "扫码与解码",
+    "DuitNow": "DuitNow 支付码",
+    "Generate": "生成",
+    "Scan": "扫描",
+
+    // 数据类型
+    "URL": "网址链接",
+    "Text": "纯文本",
+    "WiFi": "Wi-Fi 网络",
+    "Email": "电子邮箱",
+    "Phone": "电话号码",
+    "SMS": "短信",
+    "WhatsApp": "WhatsApp",
+    "Location": "地理位置",
+    "Calendar Event": "日历事件",
+    "vCard": "电子名片",
+
+    // 通用设置与参数
+    "Content": "内容",
+    "Design": "外观设计",
+    "Colors": "颜色设置",
+    "Foreground": "前景色",
+    "Background": "背景色",
+    "Logo": "中心图标",
+    "Upload Logo": "上传图标",
+    "Remove Logo": "移除图标",
+    "Quiet Zone": "留白边距",
+    "Error Correction": "容错率",
+    "Size": "尺寸",
+    "Border": "边框",
+    "Preset Colors": "预设配色",
+    "Holiday Frames": "节日边框",
+
+    // 导出与操作
+    "Download PNG": "下载 PNG 图片",
+    "Download SVG": "下载 SVG 矢量图",
+    "Copy Image": "复制图片",
+    "Copy Link": "复制链接",
+    "Reset": "重置",
+    "Clear": "清空",
+
+    // 扫码与解码
+    "Upload Image": "上传图片",
+    "Camera": "摄像头扫描",
+    "Drop an image here or paste": "拖拽图片至此或直接粘贴",
+    "Regenerate Clean QR": "重新生成清晰二维码",
+    "Decoded Content": "解码内容",
+
+    // 表单占位与提示
+    "Enter URL": "请输入网址链接",
+    "Enter text": "请输入文本内容",
+    "Network Name (SSID)": "网络名称 (SSID)",
+    "Password": "密码",
+    "Encryption": "加密方式",
+    "Hidden Network": "隐藏网络"
+  };
+
+  // 2. 文本翻译函数
+  let currentLang = localStorage.getItem('qr_studio_lang') || 'zh';
+
+  function applyTranslation(lang) {
+    if (lang !== 'zh') {
+      // 切换回英文时重新载入页面保持原生状态
+      if (localStorage.getItem('qr_studio_lang') === 'zh') {
+        localStorage.setItem('qr_studio_lang', 'en');
+        window.location.reload();
+      }
+      return;
+    }
+
+    localStorage.setItem('qr_studio_lang', 'zh');
+
+    // 遍历所有文本节点进行翻译
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    while (node = walker.nextNode()) {
+      const trimmed = node.nodeValue.trim();
+      if (zhDict[trimmed]) {
+        node.nodeValue = node.nodeValue.replace(trimmed, zhDict[trimmed]);
+      }
+    }
+
+    // 替换 input / textarea 的 placeholder
+    document.querySelectorAll('input, textarea').forEach(el => {
+      const ph = el.getAttribute('placeholder');
+      if (ph && zhDict[ph]) {
+        el.setAttribute('placeholder', zhDict[ph]);
+      }
+    });
+
+    // 替换按钮 title / aria-label
+    document.querySelectorAll('[title]').forEach(el => {
+      const t = el.getAttribute('title');
+      if (t && zhDict[t]) el.setAttribute('title', zhDict[t]);
+    });
+  }
+
+  // 3. 注入语言切换按钮
+  function insertLangButton() {
+    const btn = document.createElement('button');
+    btn.className = 'lang-toggle-btn';
+    btn.innerHTML = currentLang === 'zh' ? '🌐 中文 / EN' : '🌐 EN / 中文';
+    btn.onclick = () => {
+      const nextLang = currentLang === 'zh' ? 'en' : 'zh';
+      currentLang = nextLang;
+      localStorage.setItem('qr_studio_lang', nextLang);
+      window.location.reload();
+    };
+
+    // 优先插入到顶部导航栏右侧（通常是暗色模式按钮旁）
+    const headerControls = document.querySelector('header, nav, .header, .nav, .controls') || document.body;
+    headerControls.appendChild(btn);
+  }
+
+  // 4. 页面就绪后启动
+  window.addEventListener('DOMContentLoaded', () => {
+    insertLangButton();
+    if (currentLang === 'zh') {
+      applyTranslation('zh');
+      // 监听动态 DOM 变化（切换选项卡时补翻）
+      const observer = new MutationObserver(() => applyTranslation('zh'));
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  });
+})();
+</script>
 </body>
 </html>
